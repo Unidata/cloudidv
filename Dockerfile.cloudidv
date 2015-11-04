@@ -19,7 +19,7 @@ RUN apt-get -y upgrade
 # Install some basics.
 ###
 
-RUN apt-get install -y man nano curl x11vnc xvfb xinit fluxbox wmctrl git python
+RUN apt-get install -y man nano curl x11vnc xvfb xinit fluxbox wmctrl git python telnet
 
 ###
 # Set up a non-root user account.
@@ -56,11 +56,8 @@ RUN mkdir ~/.vnc
 # overridden when invoking 'docker run', e.g.
 #   $ docker run -e APORT=4435
 ###
-RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
-RUN echo '/usr/bin/x11vnc -reflect 127.0.0.1:$APORT -autoport 5902 -repeat -forever &' > ~/.xinitrc.nopassword
-
-
-RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
+RUN echo '/usr/bin/x11vnc -shared -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
+RUN echo '/usr/bin/x11vnc -shared -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
 
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
@@ -82,17 +79,13 @@ ENV SWPORT 6081
 
 EXPOSE ${WPORT}
 EXPOSE ${SWPORT}
+EXPOSE 5902
+EXPOSE 5901
 
 RUN git clone git://github.com/kanaka/noVNC
-RUN git clone noVNC noVNCVO
 
 RUN ln -s /home/idv/noVNC/vnc_auto.html /home/idv/noVNC/index.html
 RUN cd /home/idv/noVNC/utils && git clone https://github.com/kanaka/websockify
-RUN cd /home/idv/noVNCVO/utils && git clone /home/idv/noVNC/utils/websockify
-
-RUN sed "s/'view_only', false/'view_only', true/g" /home/idv/noVNC/vnc_auto.html > /home/idv/noVNCVO/vnc_auto.html
-RUN ln -s /home/idv/noVNCVO/vnc_auto.html /home/idv/noVNCVO/index.html
-
 
 ##
 # We can parameterize screen dimensions
@@ -105,7 +98,6 @@ ENV SIZEH 1024
 ENV SIZEW 768
 ENV CDEPTH 24
 
-ENV USENOVNC TRUE
 
 ###
 # Add the default Unidata bundle.

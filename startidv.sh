@@ -41,17 +41,16 @@ sleep 5
 
 export DISPLAY=localhost:1
 
-if [ "x${USENOVNC}" == "xTRUE" ]; then
-    pushd /home/idv/noVNC/utils/
-    openssl req -new -x509 -days 365 -nodes -out self.pem -keyout self.pem -passout pass:foobar -subj "/C=US/ST=ANY/L=Anytown/O=Dis/CN=thishost.local"
-    popd
-    /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5901 &
+pushd /home/idv/noVNC/utils/
+openssl req -new -x509 -days 365 -nodes -out self.pem -keyout self.pem -passout pass:foobar -subj "/C=US/ST=ANY/L=Anytown/O=Dis/CN=thishost.local"
+popd
+/home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5901 &
 
-    if [ "x$ENABLESHARED" != "x" ]; then
-        /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5902 --listen 6081 --web /home/idv/noVNCVO &
-    fi
-
-
+# Check to see if we are starting a view-only session as well.
+if [ "x${VIEWONLYPASS}" != "x" ]; then
+    x11vnc -storepasswd "${VIEWONLYPASS}" /home/idv/.vnc/vo-passwd
+    x11vnc -shared -viewonly -rfbauth /home/idv/.vnc/vo-passwd -reflect 127.0.0.1:5901 :1 -autoport 5902 -forever &
+    /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5902 --listen 6081 &
 fi
 
 /home/idv/IDV/runIDV
