@@ -57,7 +57,10 @@ RUN mkdir ~/.vnc
 #   $ docker run -e APORT=4435
 ###
 RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
+RUN echo '/usr/bin/x11vnc -display :1 -autoport 5902 -forever -shared -viewonly &' >> ~/.xinitrc.nopassword
+
 RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
+RUN echo '/usr/bin/x11vnc -display :1 -autoport 5902 -forever -shared -viewonly &' >> ~/.xinitrc.password
 
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
@@ -71,18 +74,24 @@ RUN echo "/usr/bin/fluxbox -log ~/.fluxbox/log" >> ~/.fluxbox/startup
 
 ENV APORT 5901
 ENV WPORT 6080
+ENV SWPORT 6081
 
-EXPOSE ${APORT}
+##
+# Only expose websocket
+##
+
 EXPOSE ${WPORT}
+EXPOSE ${SWPORT}
 
 RUN git clone git://github.com/kanaka/noVNC
 RUN ln -s /home/idv/noVNC/vnc_auto.html /home/idv/noVNC/index.html
+RUN cd /home/idv/noVNC/utils && git clone https://github.com/kanaka/websockify
 
 ##
 # We can parameterize screen dimensions
 # with the following variables.
 # e.g.
-#    docker run -p 5901:5901 -e SIZEH=800 -e SIZEW=640 -e CDEPTH=8 \
+#    docker run -p 6080:6080 -e SIZEH=800 -e SIZEW=640 -e CDEPTH=8 \
 #                       -it unidata/idv-gui ./startidv.sh
 ##
 ENV SIZEH 1024
