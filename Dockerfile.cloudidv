@@ -1,0 +1,105 @@
+#####
+# Used to generate the 'unidata/idv-base' docker container.
+# Visit us on the web at http://www.unidata.ucar.edu
+#####
+
+#####
+# Common stuff goes at the front,
+# so that we can take advantage of the
+# shared layers that docker provides.
+#####
+
+FROM ubuntu:trusty
+MAINTAINER Ward Fisher <wfisher@ucar.edu>
+
+RUN apt-get update
+RUN apt-get -y upgrade
+
+###
+# Install some basics.
+###
+
+RUN apt-get install -y man nano curl x11vnc xvfb xinit fluxbox wmctrl git python
+
+###
+# Set up a non-root user account.
+###
+
+RUN useradd -ms /bin/bash idv
+RUN adduser idv sudo
+RUN echo 'idv:docker' | chpasswd
+RUN echo 'idv ALL=NOPASSWD: ALL' >> /etc/sudoers
+
+USER idv
+ENV HOME /home/idv
+WORKDIR /home/idv
+
+###
+# Download IDV
+###
+RUN curl -SL \
+  http://motherlode.ucar.edu/repository/entry/get/RAMADDA/IDV%20Community%20Resources/IDV%20Docker/IDV.tar.bz2?entryid=18e6168c-d715-4c41-8bbb-d202481c9559 \
+  -o ~/IDV.tar.bz2
+
+RUN tar xvfj ~/IDV.tar.bz2
+
+###
+# Configure vnc, xvfb.
+# Taken from https://docs.docker.com/reference/builder/#entrypoint
+###
+RUN mkdir ~/.vnc
+
+###
+# Create a .xinitrc file.
+#
+# The environmental variable APORT = 5901 by default but can be
+# overridden when invoking 'docker run', e.g.
+#   $ docker run -e APORT=4435
+###
+RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
+RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
+
+RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
+RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
+
+###
+# Configure fluxbox.
+###
+RUN mkdir ~/.fluxbox/
+RUN bash -c 'echo "xterm &" >> ~/.fluxbox/startup'
+RUN echo "/usr/bin/fluxbox -log ~/.fluxbox/log" >> ~/.fluxbox/startup
+
+ENV APORT 5901
+ENV WPORT 6080
+
+EXPOSE ${APORT}
+EXPOSE ${WPORT}
+
+RUN git clone git://github.com/kanaka/noVNC
+RUN ln -s /home/idv/noVNC/vnc_auto.html /home/idv/noVNC/index.html
+
+##
+# We can parameterize screen dimensions
+# with the following variables.
+# e.g.
+#    docker run -p 5901:5901 -e SIZEH=800 -e SIZEW=640 -e CDEPTH=8 \
+#                       -it unidata/idv-gui ./startidv.sh
+##
+ENV SIZEH 1024
+ENV SIZEW 768
+ENV CDEPTH 24
+
+ENV USENOVNC TRUE
+
+###
+# Add the default Unidata bundle.
+###
+COPY startidv.sh /home/idv/
+COPY run_idv.sh /home/idv/
+COPY Dockerfile.cloudidv /home/idv/
+COPY README.md /home/idv/
+
+###
+# Run the IDV command.
+###
+CMD /home/idv/startidv.sh
