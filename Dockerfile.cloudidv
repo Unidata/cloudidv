@@ -56,8 +56,8 @@ RUN mkdir ~/.vnc
 # overridden when invoking 'docker run', e.g.
 #   $ docker run -e APORT=4435
 ###
-RUN echo '/usr/bin/x11vnc -shared -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
-RUN echo '/usr/bin/x11vnc -shared -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
+RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
+RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
 
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
 RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
