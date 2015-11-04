@@ -1,0 +1,74 @@
+FROM unidata/idv-base
+MAINTAINER Ward Fisher <wfisher@ucar.edu>
+
+USER root
+
+RUN apt-get install -y x11vnc xvfb xinit fluxbox wmctrl git python
+
+USER idv
+ENV HOME /home/idv
+WORKDIR /home/idv
+
+
+###
+# Configure vnc, xvfb.
+# Taken from https://docs.docker.com/reference/builder/#entrypoint
+###
+
+RUN mkdir ~/.vnc
+#RUN x11vnc -storepasswd 1234 ~/.vnc/passwd
+
+###
+# Create a .xinitrc file.
+#
+# The environmental variable APORT = 5901 by default but can be
+# overridden when invoking 'docker run', e.g.
+#   $ docker run -e APORT=4435
+###
+
+RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
+RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
+
+RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
+RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
+
+###
+# Configure fluxbox.
+###
+
+RUN mkdir ~/.fluxbox/
+RUN bash -c 'echo "xterm &" >> ~/.fluxbox/startup'
+RUN echo "/usr/bin/fluxbox -log ~/.fluxbox/log" >> ~/.fluxbox/startup
+
+ENV APORT 5901
+EXPOSE 6080
+
+RUN git clone git://github.com/kanaka/noVNC
+RUN ln -s /home/idv/noVNC/vnc_auto.html /home/idv/noVNC/index.html
+
+##
+# We can parameterize screen dimensions
+# with the following variables.
+# e.g.
+#    docker run -p 5901:5901 -e SIZEH=800 -e SIZEW=640 -e CDEPTH=8 \
+#                       -it unidata/idv-gui ./startidv.sh
+##
+ENV SIZEH 1024
+ENV SIZEW 768
+ENV CDEPTH 24
+
+ENV USENOVNC TRUE
+
+###
+# Add the default Unidata bundle.
+###
+
+COPY startidv.sh /home/idv/
+COPY run_idv.sh /home/idv/
+COPY Dockerfile.gui /home/idv/
+COPY README.md /home/idv/
+COPY CloudIDV.md /home/idv/
+COPY self_unsigned.pem /home/idv/self.pem
+
+
+CMD /home/idv/startidv.sh
