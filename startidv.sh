@@ -48,7 +48,7 @@ if [ "x${USENOVNC}" == "xTRUE" ]; then
     /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5901 &
 
     if [ "x$ENABLESHARED" != "x" ]; then
-        /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5902 --listen 6081 &
+        /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:5902 --listen 6081 --web /home/idv/noVNCVO &
     fi
 
 
