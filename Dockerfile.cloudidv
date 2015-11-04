@@ -111,7 +111,6 @@ ENV USENOVNC TRUE
 # Add the default Unidata bundle.
 ###
 COPY startidv.sh /home/idv/
-COPY run_idv.sh /home/idv/
 COPY Dockerfile.cloudidv /home/idv/
 COPY README.md /home/idv/
 
