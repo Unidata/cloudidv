@@ -45,3 +45,5 @@ pushd /home/idv/noVNC/utils/
 openssl req -new -x509 -days 365 -nodes -out self.pem -keyout self.pem -passout pass:foobar -subj "/C=US/ST=ANY/L=Anytown/O=Dis/CN=thishost.local"
 popd
 /home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:${APORT} &
+
+/home/idv/IDV/runIDV
