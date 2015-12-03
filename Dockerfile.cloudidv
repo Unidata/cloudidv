@@ -71,7 +71,7 @@ RUN echo "/usr/bin/fluxbox -log ~/.fluxbox/log" >> ~/.fluxbox/startup
 
 ENV APORT 5901
 ENV WPORT 6080
-
+ENV DOCK_IDV_MEMORY 512
 ##
 # Only expose websocket
 ##
@@ -100,6 +100,11 @@ ENV CDEPTH 24
 COPY startidv.sh /home/idv/
 COPY Dockerfile.cloudidv /home/idv/
 COPY README.md /home/idv/
+COPY runIDV /home/idv/IDV/
+
+USER root
+RUN chown -R idv:idv /home/idv
+USER idv
 
 ###
 # Run the IDV command.
