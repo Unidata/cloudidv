@@ -19,31 +19,4 @@
 # This has the added benefit of killing the image when the IDV exits.
 ###
 
-set -e
-
-trap "echo TRAPed signal" HUP INT QUIT KILL TERM
-
-if [ "x${HELP}" != "x" ]; then
-    cat README.md
-    exit
-fi
-
-if [ "x${USEPASS}" == "x" ]; then
-    cp /home/idv/.xinitrc.nopassword /home/idv/.xinitrc
-else
-    mkdir -p /home/idv/.vnc
-    cp /home/idv/.xinitrc.password /home/idv/.xinitrc
-    x11vnc -storepasswd "${USEPASS}" /home/idv/.vnc/passwd
-fi
-
-xinit -- /usr/bin/Xvfb :1 -screen 0 $SIZEH\x$SIZEW\x$CDEPTH &
-sleep 5
-
-export DISPLAY=localhost:1
-
-pushd /home/idv/noVNC/utils/
-openssl req -new -x509 -days 365 -nodes -out self.pem -keyout self.pem -passout pass:foobar -subj "/C=US/ST=ANY/L=Anytown/O=Dis/CN=thishost.local"
-popd
-/home/idv/noVNC/utils/launch.sh --vnc 127.0.0.1:${APORT} &
-
 /home/idv/IDV/runIDV

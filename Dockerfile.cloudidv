@@ -9,30 +9,8 @@
 # shared layers that docker provides.
 #####
 
-FROM ubuntu:trusty
+FROM unidata/cloudstream
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
-
-RUN apt-get update
-RUN apt-get -y upgrade
-
-###
-# Install some basics.
-###
-
-RUN apt-get install -y man nano curl x11vnc xvfb xinit fluxbox wmctrl git python telnet
-
-###
-# Set up a non-root user account.
-###
-
-RUN useradd -ms /bin/bash idv
-RUN adduser idv sudo
-RUN echo 'idv:docker' | chpasswd
-RUN echo 'idv ALL=NOPASSWD: ALL' >> /etc/sudoers
-
-USER idv
-ENV HOME /home/idv
-WORKDIR /home/idv
 
 ###
 # Download IDV
@@ -44,64 +22,15 @@ RUN curl -SL \
 RUN tar xvfj ~/IDV.tar.bz2
 
 ###
-# Configure vnc, xvfb.
-# Taken from https://docs.docker.com/reference/builder/#entrypoint
-###
-RUN mkdir ~/.vnc
-
-###
-# Create a .xinitrc file.
-#
-# The environmental variable APORT = 5901 by default but can be
-# overridden when invoking 'docker run', e.g.
-#   $ docker run -e APORT=4435
-###
-RUN echo '/usr/bin/x11vnc -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.nopassword
-RUN echo '/usr/bin/x11vnc -usepw -display :1 -autoport $APORT -repeat -forever &' > ~/.xinitrc.password
-
-RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.nopassword
-RUN echo "/usr/bin/startfluxbox" >> ~/.xinitrc.password
-
-###
-# Configure fluxbox.
-###
-RUN mkdir ~/.fluxbox/
-RUN bash -c 'echo "xterm &" >> ~/.fluxbox/startup'
-RUN echo "/usr/bin/fluxbox -log ~/.fluxbox/log" >> ~/.fluxbox/startup
-
-ENV APORT 5901
-ENV WPORT 6080
-
-##
-# Only expose websocket
-##
-
-EXPOSE ${WPORT}
-
-RUN git clone git://github.com/kanaka/noVNC
-
-RUN ln -s /home/idv/noVNC/vnc_auto.html /home/idv/noVNC/index.html
-RUN cd /home/idv/noVNC/utils && git clone https://github.com/kanaka/websockify
-
-##
-# We can parameterize screen dimensions
-# with the following variables.
-# e.g.
-#    docker run -p 6080:6080 -e SIZEH=800 -e SIZEW=640 -e CDEPTH=8 \
-#                       -it unidata/idv-gui ./startidv.sh
-##
-ENV SIZEH 1024
-ENV SIZEW 768
-ENV CDEPTH 24
-
-###
 # Add the default Unidata bundle.
 ###
-COPY startidv.sh /home/idv/
-COPY Dockerfile.cloudidv /home/idv/
-COPY README.md /home/idv/
+COPY start.sh ${WORKDIR}
+COPY Dockerfile.cloudidv ${WORKDIR}
+COPY README.md ${WORKDIR}
 
 ###
 # Run the IDV command.
+#
+# This is implicit in the start.sh script.
 ###
-CMD /home/idv/startidv.sh
+#CMD /home/idv/startidv.sh
