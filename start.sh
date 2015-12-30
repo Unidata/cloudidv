@@ -19,4 +19,4 @@
 # This has the added benefit of killing the image when the IDV exits.
 ###
 
-/home/idv/IDV/runIDV
+~/IDV/runIDV
