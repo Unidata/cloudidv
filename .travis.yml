@@ -1,0 +1,12 @@
+sudo: required
+
+language: ruby
+
+services:
+  - docker
+
+before_install:
+  - docker pull unidata/cloudstream > /dev/null
+
+script:
+  - docker build -t unidata/cloudidv -f Dockerfile.cloudidv .
