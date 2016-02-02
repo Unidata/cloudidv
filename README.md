@@ -1,4 +1,8 @@
-# CloudIDV
+
+# CloudIDV <IMG SRC="https://travis-ci.org/Unidata/cloudidv.svg?branch=master"/>
+
+
+
 
 This docker image contains an instance of the Unidata Integrated Data Viewer (IDV) running within a virtual X11 environment.  It is accessed via a web browser, once it is up and running.
 
@@ -15,7 +19,7 @@ Alternatively, if you wish to run multiple sessions, or leverage dynamic port ma
 By default, CloudIDV does not use a password. You may secure your CloudIDV session with a password by using the `USEPASS` environmental variable to set a password for the session.  
 
     $ docker run -e USEPASS="password" -P -it unidata/cloudidv
-    
+
 Finally, you may view this help file by setting the `HELP` environmental variable to any non-empty string, e.g.
 
     $ docker run -e HELP=YES -it unidata/cloudidv
