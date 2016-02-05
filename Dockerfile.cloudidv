@@ -32,7 +32,7 @@ COPY README.md ${WORKDIR}/
 # Add the version number to the version file.
 # Viewable when you run script using 'VERSION' env variable.
 ###
-ENV CLOUDIDV_VERSION 1.1.0 - development
+ENV CLOUDIDV_VERSION 1.1.0
 RUN echo "CloudIDV Version: \"$CLOUDIDV_VERSION\"\t\t$(date)" >> $VERSION_FILE
 
 ###
