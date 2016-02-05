@@ -9,7 +9,7 @@
 # shared layers that docker provides.
 #####
 
-FROM unidata/cloudstream
+FROM unidata/cloudstream:1.0.0
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 
 ###
