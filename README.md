@@ -1,9 +1,6 @@
 
 # CloudIDV <IMG SRC="https://travis-ci.org/Unidata/cloudidv.svg?branch=master"/>
 
-
-
-
 This docker image contains an instance of the Unidata Integrated Data Viewer (IDV) running within a virtual X11 environment.  It is accessed via a web browser, once it is up and running.
 
 #### Running the CloudIDV Docker Image
