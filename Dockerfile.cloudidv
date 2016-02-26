@@ -13,7 +13,7 @@
 
 FROM unidata/cloudstream
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
-ARG CLOUDIDV_VERSION=development
+ENV CLOUDIDV_VERSION development
 
 ###
 # Download IDV
