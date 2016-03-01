@@ -24,9 +24,9 @@ RUN tar xvfj ~/IDV.tar.bz2
 ###
 # Add the default Unidata bundle.
 ###
-COPY start.sh ${WORKDIR}/
-COPY Dockerfile.cloudidv ${WORKDIR}/
-COPY README.md ${WORKDIR}/
+COPY start.sh /home/${CUSER}/
+COPY Dockerfile.cloudidv /home/${CUSER}/
+COPY README.md /home/${CUSER}/
 
 ###
 # Add the version number to the version file.
