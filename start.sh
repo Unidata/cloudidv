@@ -5,4 +5,8 @@
 # base unidata/cloudstream image.
 ###
 
+if [ "x$USERCLONE" != "x" ]; then
+    ~/rclone-gui.py
+fi
+
 ~/IDV/runIDV
