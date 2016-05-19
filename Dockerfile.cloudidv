@@ -16,16 +16,6 @@ MAINTAINER Ward Fisher <wfisher@ucar.edu>
 ENV CLOUDIDV_VERSION development
 
 ###
-# Install some packages for use with rclone-gui.py
-###
-USER root
-RUN apt-get update && apt-get install -y python3-tk python3-pexpect
-
-
-USER ${CUSER}
-
-
-###
 # Download IDV
 ###
 RUN curl -SL \
@@ -41,7 +31,6 @@ COPY start.sh ${HOME}/
 COPY Dockerfile.cloudidv ${HOME}/
 COPY README.md ${HOME}/
 COPY COPYRIGHT_CLOUDIDV.md ${HOME}/
-COPY rclone-gui.py ${HOME}/
 
 ENV COPYRIGHT_FILE COPYRIGHT_CLOUDIDV.md
 ENV README_FILE README.md
