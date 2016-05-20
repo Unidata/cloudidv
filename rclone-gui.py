@@ -48,14 +48,19 @@ class MainApplication(tk.Frame):
         self.btn_auth = Button(self, text="Authenticate", command = self.configDB)
         self.btn_import = Button(self, text="Import", command = self.importFiles)
         self.btn_export = Button(self, text="Export", command = self.exportFiles)
+        self.btn_idv = Button(self, text="Launch IDV", command = self.runIDV)
         self.btn_quit = Button(self,text="Quit", command=quit)
 
         self.btn_auth.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_import.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_export.pack(side="top",fill="both",padx=10,expand=True)
+        self.btn_idv.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_quit.pack(side="bottom",fill="both",padx=10,expand=True)
 
         parent.bind('<Control-c>', self.quit_proc)
+
+    def runIDV(self):
+        idv = subprocess.call(os.path.expanduser("~/IDV/runIDV"),shell=True)
 
     def configDB(self):
         child = pexpect.spawnu('rclone config')
