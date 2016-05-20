@@ -4,6 +4,7 @@ import os
 import tkinter as tk
 import signal
 
+from tkinter import *
 from tkinter import StringVar
 from tkinter import messagebox
 from tkinter import Tk
@@ -19,12 +20,20 @@ import pexpect
 class KeySimpleDialog(sdg.Dialog):
 
     def body(self, master):
+
+        minst = ['1. Sign in to Dropbox via web browser.','2. Copy dropbox key with highlight, right-click, copy','3. Minimize browser window.','4. Click the "Grab Key from clipboard button".', '5. Press "ok"']
+
         self.result = "default result"
         self.keytxt = StringVar()
-        self.keylbl = Label(master, textvariable = self.keytxt).grid(row=0)
+        self.insttxt = StringVar()
+
+        self.instlbl = Label(master, textvariable = self.insttxt, justify=LEFT).grid(row=0)
+        self.insttxt.set("\n".join(minst))
+
+        self.keylbl = Label(master, textvariable = self.keytxt).grid(row=1)
         self.keyentry = Entry(master,textvariable=self.keytxt)
         self.keytxt.set("[Key will go here]")
-        self.grabbtn = Button(master, text="Grab Key from clipboard", command = self.grabKey).grid(row=1)
+        self.grabbtn = Button(master, text="Grab Key from clipboard", command = self.grabKey).grid(row=2)
 
     def grabKey(self):
         print("Key: " + self.clipboard_get())
@@ -127,12 +136,12 @@ class MainApplication(tk.Frame):
             print("Creating target directory ~/.unidata")
             os.makedirs(os.path.expanduser('~/.unidata'))
 
-        mimport = subprocess.call("/usr/bin/rclone --stats 0m5s copy dropbox:unidata_sync/idv ~/.unidata",shell=True)
+        mimport = subprocess.call("/usr/bin/rclone --stats 0m5s --exclude jython2.7/** copy dropbox:unidata_sync/idv ~/.unidata",shell=True)
         messagebox.showinfo("Import","Files imported from dropbox:unidata_sync/IDV")
 
     def exportFiles(self):
         if os.path.exists(os.path.expanduser("~/.unidata")):
-            mexport = subprocess.call("/usr/bin/rclone copy ~/.unidata dropbox:unidata_sync/idv",shell=True)
+            mexport = subprocess.call("/usr/bin/rclone --stats 0m5s --exclude jython2.7/** copy ~/.unidata dropbox:unidata_sync/idv",shell=True)
             messagebox.showinfo("Export","Files exported to dropbox:unidata_sync/IDV")
         else:
             messagebox.showinfo("Export","No files found in ~/.unidata to export.")
