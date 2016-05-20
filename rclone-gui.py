@@ -4,13 +4,40 @@ import os
 import tkinter as tk
 import signal
 
+from tkinter import StringVar
 from tkinter import messagebox
+from tkinter import Tk
+from tkinter import Label
+from tkinter import Entry
 from tkinter import Button
 from tkinter import simpledialog as sdg
 
 import subprocess
 import sys
 import pexpect
+
+class KeySimpleDialog(sdg.Dialog):
+
+    def body(self, master):
+        self.result = "default result"
+        self.keytxt = StringVar()
+        self.keylbl = Label(master, textvariable = self.keytxt).grid(row=0)
+        self.keyentry = Entry(master,textvariable=self.keytxt)
+        self.keytxt.set("[Key will go here]")
+        self.grabbtn = Button(master, text="Grab Key from clipboard", command = self.grabKey).grid(row=1)
+
+    def grabKey(self):
+        print("Key: " + self.clipboard_get())
+        self.keytxt.set(self.clipboard_get())
+        self.result = self.clipboard_get()
+
+
+    def apply(self):
+        print("Apply caught.")
+        print("Result: " + self.result)
+
+    def validate(self):
+        return 1
 
 class MainApplication(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -58,11 +85,13 @@ class MainApplication(tk.Frame):
 
         child.expect('https://.*response_type=code')
 
-        mbrowser = subprocess.Popen(["/usr/bin/firefox", child.after], preexec_fn=os.setsid)
+        mbrowser = subprocess.Popen(["/usr/bin/firefox", "--private-window", child.after], preexec_fn=os.setsid)
 
         mlines = ['Please sign in to your dropbox account', 'to allow rcopy to import/export data.', '', 'Your credentials are not read or stored by this process.', 'Once authenticated, copy and paste (ctrl-c, ctrl-v) the key', 'provided by dropbox into this dialog.', '']
-        mykey = sdg.askstring("Key", "\n".join(mlines))
-
+        ##mykey = sdg.askstring("Key", "\n".join(mlines))
+        d = KeySimpleDialog(root)
+        mykey = d.result
+        print("mykey: " + mykey)
         child.expect('Enter the code: ')
 
         ## Kill the browser.
@@ -89,11 +118,19 @@ class MainApplication(tk.Frame):
         messagebox.showinfo("Output",stdoutdata.split()[0])
 
     def importFiles(self):
-        messagebox.showinfo("Info","Not yet implemented")
+        if not os.path.exists(os.path.expanduser('~/.unidata')):
+            print("Creating target directory ~/.unidata")
+            os.makedirs(os.path.expanduser('~/.unidata'))
+
+        mimport = subprocess.call("/usr/bin/rclone --stats 0m5s copy dropbox:unidata_sync/idv ~/.unidata",shell=True)
+        messagebox.showinfo("Import","Files imported from dropbox:unidata_sync/IDV")
 
     def exportFiles(self):
-        messagebox.showinfo("Info","Not yet implemented")
-
+        if os.path.exists(os.path.expanduser("~/.unidata")):
+            mexport = subprocess.call("/usr/bin/rclone copy ~/.unidata dropbox:unidata_sync/idv",shell=True)
+            messagebox.showinfo("Export","Files exported to dropbox:unidata_sync/IDV")
+        else:
+            messagebox.showinfo("Export","No files found in ~/.unidata to export.")
 
 if __name__ == "__main__":
         root = tk.Tk()
