@@ -16,16 +16,6 @@ MAINTAINER Ward Fisher <wfisher@ucar.edu>
 ENV CLOUDIDV_VERSION development
 
 ###
-# Install some packages for use with rclone-gui.py
-###
-USER root
-RUN apt-get update && apt-get install -y python3-tk python3-pexpect
-
-
-USER ${CUSER}
-
-
-###
 # Download IDV
 ###
 RUN curl -SL \

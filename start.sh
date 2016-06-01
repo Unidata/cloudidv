@@ -6,7 +6,7 @@
 ###
 
 if [ "x$USERCLONE" != "x" ]; then
-    ~/rclone-gui.py
+    xterm -e "~/rclone-gui.py"
+else
+    ~/IDV/runIDV
 fi
-
-~/IDV/runIDV
