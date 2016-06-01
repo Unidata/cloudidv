@@ -58,16 +58,16 @@ class MainApplication(tk.Frame):
 
         child.expect('https://.*response_type=code')
 
-        mbrowser = subprocess.Popen(["/usr/bin/firefox", child.after], preexec_fn=os.setsid)
+        mbrowser = subprocess.Popen(["/usr/bin/midori", child.after], preexec_fn=os.setsid)
 
-        mlines = ['Please sign in to your dropbox account', 'to allow rcopy to import/export data.', '', 'Your credentials are not read or stored by this process.', 'Once authenticated, copy and paste (ctrl-c, ctrl-v) the key', 'provided by dropbox into this dialog.', '']
+        mlines = ['Please sign in to your dropbox account', 'to allow rcopy to import/export data.', '', 'Your credentials are not read or stored by this process.', 'Use key provided by dropbox into this dialog.', '']
         mykey = sdg.askstring("Key", "\n".join(mlines))
 
         child.expect('Enter the code: ')
 
         ## Kill the browser.
         os.killpg(os.getpgid(mbrowser.pid), signal.SIGTERM)
-        #print("Using key: " + mykey)
+
         child.sendline(mykey)
 
         child.expect('y/e/d> ')
@@ -83,10 +83,6 @@ class MainApplication(tk.Frame):
     def quit_proc(self):
         print("Quit event caught")
         quit()
-
-    def tst2(self):
-        stdoutdata = subprocess.getoutput("ls")
-        messagebox.showinfo("Output",stdoutdata.split()[0])
 
     def importFiles(self):
         messagebox.showinfo("Info","Not yet implemented")
