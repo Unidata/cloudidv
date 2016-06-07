@@ -49,11 +49,11 @@ spawnidv() {
     if [ ! -d "$DVOL" ]; then
         mkdir -p $DVOL
     fi
-    chmod -R 777 $DVOL
 
     echo "Processing $HNAME $PORT $PWORD"
 
-    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
+    # docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
+    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -e SSLONLY=TRUE unidata/cloudidv
 
 
 }
