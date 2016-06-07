@@ -49,6 +49,7 @@ spawnidv() {
     if [ ! -d "$DVOL" ]; then
         mkdir -p $DVOL
     fi
+    chmod -R 777 $DVOL
 
     echo "Processing $HNAME $PORT $PWORD"
 
