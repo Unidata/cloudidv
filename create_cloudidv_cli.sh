@@ -53,7 +53,7 @@ spawnidv() {
 
     echo "Processing $HNAME $PORT $PWORD"
 
-    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata unidata/cloudidv
+    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
 
 
 }
