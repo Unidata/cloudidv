@@ -29,18 +29,26 @@ dohelp() {
 
     echo -e ""
     echo "Usage: $0 [instance name] [port] [password]"
-    echo -e "* [instance name]:\tThis will also be used for the hostname"
-    echo -e "                  \tand the data directory mapping."
-    echo -e "* [port]:\t\tThe external port to expose for connections."
-    echo -e "* [password]:\t\tThe session must be password protected."
+    echo ""
+    echo -e "  * [instance name]:\tThis will also be used for the hostname"
+    echo -e "                    \tand the data directory mapping."
+    echo -e "  * [port]:\t\tThe external port to expose for connections."
+    echo -e "  * [password]:\t\tThe session must be password protected."
     echo -e ""
+    echo -e "Example:"
+    echo -e ""
+    echo -e "\t$ $0 test1 6080 abcd1234"
     echo -e ""
 }
 
 if [ $# -ne 3 ]; then
+    echo ""
+    echo "Wrong number of arguments!"
+    echo ""
     dohelp
     exit 1
 fi
+
 
 
 
