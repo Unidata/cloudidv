@@ -55,7 +55,6 @@ spawnidv() {
     # docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
     docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e USEPASS=$PWORD -e SSLONLY=TRUE -e SHARED=TRUE unidata/cloudidv
 
-
 }
 
 ###
