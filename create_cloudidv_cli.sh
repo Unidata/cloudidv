@@ -36,10 +36,12 @@ spawnidv() {
     ##
     # Remove extant named machine if it exists.
     ##
-    echo "Checking if $HNAME exists, removing if so."
+    echo "Checking if $HNAME exists, skipping if so."
     set +e
     if [ $(docker ps -a | grep $HNAME | wc -l | tr -s " " | cut -d " " -f 2 ) -gt 0 ]; then
-        docker rm $HNAME
+       echo "$HNAME Found."
+
+       return 0
     fi
     set -e
     ###
