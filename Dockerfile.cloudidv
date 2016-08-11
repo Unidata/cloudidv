@@ -32,6 +32,7 @@ COPY Dockerfile.cloudidv ${HOME}/
 COPY README.md ${HOME}/
 COPY COPYRIGHT_CLOUDIDV.md ${HOME}/
 COPY rclone-gui.py ${HOME}/
+COPY idv-launcher.py ${HOME}/
 COPY create_cloudidv_cli.sh ${HOME}/
 
 ENV COPYRIGHT_FILE COPYRIGHT_CLOUDIDV.md
