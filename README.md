@@ -38,9 +38,11 @@ This will connect you to your CloudIDV session.
 
 The following advanced options are available when running the cloudidv docker image.  
 
-* SIZEH: Screen Height, default 1024
-* SIZEW: Screen Width, default 768
-* CDEPTH: Color Depth, default 24
+* `IDVMEM`: Control the amount of memory specified available to the JVM at runtime, effectively setting the amount of memory available to the IDV, in `m`.  The default value is `512`.
+
+* `SIZEH`: Screen Height, default 1024
+* `SIZEW`: Screen Width, default 768
+* `CDEPTH`: Color Depth, default 24
 
 You would use these parameters as follows:
 
