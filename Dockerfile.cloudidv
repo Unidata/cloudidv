@@ -37,6 +37,7 @@ COPY create_cloudidv_cli.sh ${HOME}/
 
 ENV COPYRIGHT_FILE COPYRIGHT_CLOUDIDV.md
 ENV README_FILE README.md
+ENV IDVMEM=512
 
 ###
 # Add the version number to the version file.

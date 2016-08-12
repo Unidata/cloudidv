@@ -24,12 +24,15 @@ class MainApplication(tk.Frame):
         parent.minsize(width=250,height=100)
         self.parent = parent
         # Create GUI here
+        self.labelText = "IDV Memory available: %sm" % (os.getenv('IDVMEM', "512"))
+        self.lbl_mem = Label(self, text=self.labelText)
         self.btn_idv = Button(self, text="Launch IDV", command = self.runIDV)
 
+        self.lbl_mem.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_idv.pack(side="top",fill="both",padx=10,expand=True)
 
     def runIDV(self):
-        idv = subprocess.call(os.path.expanduser("~/IDV/jre/bin/java -Xmx512m -XX:+DisableExplicitGC -Didv.enableStereo=false -jar ~/IDV/idv.jar"),shell=True)
+        idv = subprocess.call(os.path.expanduser("~/IDV/jre/bin/java -Xmx%sm -XX:+DisableExplicitGC -Didv.enableStereo=false -jar ~/IDV/idv.jar" % (os.getenv('IDVMEM', "512"))), shell=True)
 
 if __name__ == "__main__":
         root = tk.Tk()
