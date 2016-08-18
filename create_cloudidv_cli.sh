@@ -56,7 +56,7 @@ spawnidv() {
     echo "Processing $HNAME $PORT $PWORD $IMEM"
 
     # docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
-    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e USEPASS=$PWORD -e SSLONLY=TRUE -e IDVMEM=$IMEM -e SHARED=TRUE -e SIZEH=768 -e SIZEW=1360 unidata/cloudidv
+    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e USEPASS=$PWORD -e SSLONLY=TRUE -e IDVMEM=$IMEM -e SHARED=TRUE -e SIZEH=900 -e SIZEW=1440 unidata/cloudidv
 
 }
 
