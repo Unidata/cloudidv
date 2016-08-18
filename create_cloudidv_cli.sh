@@ -32,6 +32,7 @@ spawnidv() {
     HNAME=$1
     PORT=$2
     PWORD=$3
+    IMEM=$4
 
     ##
     # Remove extant named machine if it exists.
@@ -52,10 +53,10 @@ spawnidv() {
         mkdir -p $DVOL
     fi
 
-    echo "Processing $HNAME $PORT $PWORD"
+    echo "Processing $HNAME $PORT $PWORD $IMEM"
 
     # docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e PASS=$PWORD -v $DVOL:/home/stream/.unidata -e SSLONLY=TRUE unidata/cloudidv
-    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e USEPASS=$PWORD -e SSLONLY=TRUE -e SHARED=TRUE unidata/cloudidv
+    docker run -d -it --hostname $HNAME --name $HNAME -p $PORT:6080 -e USEPASS=$PWORD -e SSLONLY=TRUE -e IDVMEM=$IMEM -e SHARED=TRUE unidata/cloudidv
 
 }
 
@@ -65,7 +66,7 @@ spawnidv() {
 dohelp() {
 
     echo -e ""
-    echo "Usage: $0 [instance name] [port] [password] -f <filename>"
+    echo "Usage: $0 [instance name] [port] [password] [memory in MB] -f <filename>"
     echo ""
     echo -e "  * [instance name]:\tThis will also be used for the hostname"
     echo -e "                    \tand the data directory mapping."
@@ -99,7 +100,7 @@ done
 
 if [ "x$INFILE" == "x" ]; then
 
-    if [ $# -ne 3 ]; then
+    if [ $# -ne 4 ]; then
         echo ""
         echo "Wrong number of arguments!"
         echo ""
@@ -110,11 +111,12 @@ if [ "x$INFILE" == "x" ]; then
     HNAME=$1
     PORT=$2
     PASS=$3
+    IMEM=$4
 
     ##
     # Run the instance detached
     ##
-    spawnidv $HNAME $PORT $PASS
+    spawnidv $HNAME $PORT $PASS $IMEM
 
 
 else # Reading in from a file
@@ -126,10 +128,10 @@ else # Reading in from a file
 
     echo "Reading configuration in from file: $INFILE"
 
-    while read HNAME PORT PASS
+    while read HNAME PORT PASS IMEM
     do
 
-        spawnidv $HNAME $PORT $PASS
+        spawnidv $HNAME $PORT $PASS $IMEM
         sleep 1
 
     done < $INFILE
