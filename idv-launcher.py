@@ -24,10 +24,14 @@ class MainApplication(tk.Frame):
         parent.minsize(width=250,height=100)
         self.parent = parent
         # Create GUI here
+        self.infoText = "The amount of memory available is modified using the IDVMEM parameter\nwhen launching the Docker container."
         self.labelText = "IDV Memory available: %sm" % (os.getenv('IDVMEM', "512"))
+
+        self.lbl_info = Label(self, text=self.infoText)
         self.lbl_mem = Label(self, text=self.labelText)
         self.btn_idv = Button(self, text="Launch IDV", command = self.runIDV)
 
+        self.lbl_info.pack(side="top",fill="both",padx=10,expand=True)
         self.lbl_mem.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_idv.pack(side="top",fill="both",padx=10,expand=True)
 
