@@ -24,7 +24,7 @@ class MainApplication(tk.Frame):
         parent.minsize(width=250,height=100)
         self.parent = parent
         # Create GUI here
-        self.infoText = "The amount of memory available is modified using the IDVMEM parameter\nwhen launching the Docker container."
+        self.infoText = "The amount of memory available is modified using\n the IDVMEM parameter when launching\n the Docker container."
         self.labelText = "IDV Memory available: %sm" % (os.getenv('IDVMEM', "512"))
 
         self.lbl_info = Label(self, text=self.infoText)
