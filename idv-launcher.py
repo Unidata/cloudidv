@@ -30,12 +30,13 @@ class MainApplication(tk.Frame):
         self.lbl_info = Label(self, text=self.infoText)
         self.lbl_mem = Label(self, text=self.labelText)
         self.btn_idv = Button(self, text="Launch IDV", command = self.runIDV)
-        self.btn_watch = Button(self, text="Launch Watch Widget", command=self.runWatch)
+        #self.btn_watch = Button(self, text="Launch Watch Widget", command=self.runWatch)
 
         self.lbl_info.pack(side="top",fill="both",padx=10,expand=True)
         self.lbl_mem.pack(side="top",fill="both",padx=10,expand=True)
         self.btn_idv.pack(side="top",fill="both",padx=10,expand=True)
-        self.btn_watch.pack(side="top",fill="both",padx=10,expand=True)
+        #self.btn_watch.pack(side="top",fill="both",padx=10,expand=True)
+        self.runIDV()
 
     def runIDV(self):
         idv = subprocess.call(os.path.expanduser("~/IDV/jre/bin/java -Xmx%sm -XX:+DisableExplicitGC -Didv.enableStereo=false -jar ~/IDV/idv.jar" % (os.getenv('IDVMEM', "512"))), shell=True)
