@@ -8,5 +8,5 @@
 if [ "x$USERCLONE" != "x" ]; then
     xterm -e "~/rclone-gui.py"
 else
-    ~/idv-launcher.py
+    DISPLAY=:1 ~/idv-launcher.py
 fi

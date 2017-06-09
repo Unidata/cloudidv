@@ -14,6 +14,7 @@
 FROM unidata/cloudstream
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 ENV CLOUDIDV_VERSION development
+USER ${CUSER}
 
 ###
 # Download IDV
@@ -22,7 +23,7 @@ RUN curl -SL \
   http://motherlode.ucar.edu/repository/entry/get/RAMADDA/IDV%20Community%20Resources/IDV%20Docker/IDV.tar.bz2?entryid=18e6168c-d715-4c41-8bbb-d202481c9559 \
   -o ~/IDV.tar.bz2
 
-RUN tar xvfj ~/IDV.tar.bz2
+RUN tar xvfj ~/IDV.tar.bz2 && mv IDV_5.4 IDV
 
 ###
 # Add the default Unidata bundle.
@@ -46,9 +47,12 @@ ENV IDVMEM=512
 
 RUN echo "CloudIDV Version: \"$CLOUDIDV_VERSION\"\t\t$(date)" >> $VERSION_FILE
 
+USER root
+RUN chown -R ${CUSER}:${CUSER} ${HOME}
+USER ${CUSER}
+
 ###
 # Run the IDV command.
 #
 # This is implicit in the start.sh script.
 ###
-#CMD /home/idv/startidv.sh
