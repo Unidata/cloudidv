@@ -23,7 +23,7 @@ RUN curl -SL \
   http://motherlode.ucar.edu/repository/entry/get/RAMADDA/IDV%20Community%20Resources/IDV%20Docker/IDV.tar.bz2?entryid=18e6168c-d715-4c41-8bbb-d202481c9559 \
   -o ~/IDV.tar.bz2
 
-RUN tar xvfj ~/IDV.tar.bz2 && mv IDV_5.4 IDV
+RUN tar xvfj ~/IDV.tar.bz2 && mv IDV_5.5 IDV
 
 ###
 # Add the default Unidata bundle.
@@ -39,6 +39,12 @@ COPY create_cloudidv_cli.sh ${HOME}/
 ENV COPYRIGHT_FILE COPYRIGHT_CLOUDIDV.md
 ENV README_FILE README.md
 ENV IDVMEM=512
+
+###
+# Override default cloudstream geometry
+###
+ENV SIZEW 1600
+ENV SIZEH 900
 
 ###
 # Add the version number to the version file.

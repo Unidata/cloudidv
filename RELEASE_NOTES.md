@@ -2,6 +2,11 @@
 
 These are the release notes for the Unidata CloudIDV project.
 
+## 1.4.0 TBD
+
+* Updated IDV to version 5.5
+* Increased default resolution to 1600x900
+
 ## 1.3.0 June 13, 2018
 
 * Bumped IDV to version 5.4.
