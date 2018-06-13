@@ -11,7 +11,7 @@
 # shared layers that docker provides.
 #####
 
-FROM unidata/cloudstream
+FROM unidata/cloudstream:1.3.0
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
 ENV CLOUDIDV_VERSION development
 USER ${CUSER}
