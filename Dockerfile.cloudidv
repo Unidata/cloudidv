@@ -13,7 +13,7 @@
 
 FROM unidata/cloudstream:1.3.0
 MAINTAINER Ward Fisher <wfisher@ucar.edu>
-ENV CLOUDIDV_VERSION development
+ENV CLOUDIDV_VERSION 1.3.0
 USER ${CUSER}
 
 ###
