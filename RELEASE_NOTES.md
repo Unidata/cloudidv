@@ -2,10 +2,13 @@
 
 These are the release notes for the Unidata CloudIDV project.
 
-## 1.4.0 TBD
+## 1.5.0 TBD
+
+## 1.4.0 September 28, 2018
 
 * Updated IDV to version 5.5
 * Increased default resolution to 1600x900
+* Reverted Underlying cloudstream to use Ubuntu `trusty`, to mitigate issues OpenGL issues present in the latest Ubuntu release.
 
 ## 1.3.0 June 13, 2018
 
